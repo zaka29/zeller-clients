@@ -7,9 +7,11 @@ type UserListProps = {
 };
 
 export default function UserList({ selectedFilter, users }: UserListProps) {
-  const filteredUsers = users.filter(
-    (user: ZellerCustomer) => user.role.toLowerCase() === selectedFilter,
-  );
+  const filteredUsers = users
+    .filter(
+      (user: ZellerCustomer) => user.role.toLowerCase() === selectedFilter,
+    )
+    .sort((a, b) => a.name.localeCompare(b.name));
 
   return (
     <div className="pt-4 text-gray-800">
