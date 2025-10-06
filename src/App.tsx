@@ -24,7 +24,7 @@ function App() {
   return (
     <div className="grid h-full grid-cols-6 content-center gap-4">
       <div className="col-span-4 col-start-2">
-        <div className="flex flex-col rounded border border-gray-100 p-4 shadow-md">
+        <div className="flex min-h-[400px] flex-col rounded border border-gray-100 p-4 shadow-md">
           {errorMessage && (
             <div className="mb-4 flex items-center justify-between rounded border border-red-500 bg-red-100 p-4 text-red-500">
               <p>{errorMessage}</p>
