@@ -1,73 +1,77 @@
-# React + TypeScript + Vite
+# Project Overview
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A minimal Vite + React + TypeScript starter that demonstrates connecting to AWS AppSync (Amplify v6), a small component split (UserTypes + UserList) and a Vitest-based testing setup with mocked GraphQL hook.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+# Project scaffold
 
-## React Compiler
+* **Goal**: start as quickly as possible — this project uses the Vite `react-ts` template.
+* To install and run locally:
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install && npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+* UI styling: **Tailwind CSS** is used for rapid component design and prototyping.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+---
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+# Components structure
+
+* `App.tsx` — main container / screen. Responsible for wiring the customer filter and rendering fetched customer list.
+* `UserTypes` — presentational component that renders radio controls for the `admin` / `manager` filter.
+* `UserList` — presentational component that receives `users` and `selectedFilter` and renders filtered items.
+
+---
+
+# Components test strategy
+
+Integration-style testing focused on behavior and user flows rather than implementation details.
+
+Key ideas:
+
+* **Test App.tsx as a full unit** (integration style): render the container and its children and assert UI behavior.
+* **Mock the `useZelletCustomers` hook** for tests so no real network/AWS calls are made.
+* Assertions to include in tests:
+
+    * Loading state renders correctly.
+    * Default behavior: Admin users are shown by default.
+    * Switching the radio filter shows Manager users.
+    * Error state renders an accessible error box and can be dismissed.
+---
+
+# Running tests
+
+Scripts in `package.json` (recommended):
+
+```json
+{
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:ui": "vitest --ui"
+  }
+}
+```
+
+Run unit tests once (CI-friendly):
+
+```bash
+npm run test
+```
+
+Run in watch mode while developing:
+
+```bash
+npm run test:watch
+```
+
+Open the Vitest UI dashboard:
+
+```bash
+npm run test:ui
 ```
