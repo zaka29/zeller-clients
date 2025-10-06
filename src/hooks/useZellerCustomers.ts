@@ -2,15 +2,19 @@ import { useState, useEffect } from "react";
 import { ListZellerCustomers } from "../graphql/queries.ts";
 import { generateClient } from "aws-amplify/api";
 
-type ZellerCustomer = {
+export type ZellerCustomer = {
   email: string;
   id: string;
   name: string;
   role: string;
 };
 
+type ListZellerCustomersResponse = {
+  items: ZellerCustomer[];
+};
+
 type Result = {
-  data: ZellerCustomer[] | null;
+  data: ListZellerCustomersResponse | null;
   loading: boolean;
   error: string | null;
   refetch: () => Promise<void>;
@@ -19,7 +23,7 @@ type Result = {
 const client = generateClient();
 
 export function useZellerCustomers(): Result {
-  const [data, setData] = useState<ZellerCustomer[] | null>(null);
+  const [data, setData] = useState<ListZellerCustomersResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -28,7 +32,7 @@ export function useZellerCustomers(): Result {
     setError(null);
 
     try {
-      const result = await client.graphql({
+      const result = await client.graphql<ListZellerCustomersResponse>({
         query: ListZellerCustomers,
       });
 
