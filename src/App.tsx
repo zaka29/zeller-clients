@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useZellerCustomers } from "./hooks/useZellerCustomers.ts";
 import UserTypes from "./components/UserTypes.tsx";
-import Users from "./components/Users.tsx";
+import UserList from "./components/UsersList.tsx";
 
 export type Filter = "admin" | "manager";
 
@@ -26,7 +26,7 @@ function App() {
       <div className="col-span-4 col-start-2">
         <div className="flex flex-col rounded border border-gray-100 p-4 shadow-md">
           {errorMessage && (
-            <div className="mb-4 flex items-center justify-between rounded border border-red-500 bg-red-200 p-4 text-red-500">
+            <div className="mb-4 flex items-center justify-between rounded border border-red-500 bg-red-100 p-4 text-red-500">
               <p>{errorMessage}</p>
               <button
                 className="rounded border p-1 text-xs"
@@ -41,7 +41,9 @@ function App() {
             selectedFilter={selectedFilter}
           />
           {loading && <div>Loading...</div>}
-          {data && data.length > 0 && <Users selectedFilter={selectedFilter} />}
+          {data && data.items.length > 0 && (
+            <UserList users={data.items} selectedFilter={selectedFilter} />
+          )}
         </div>
       </div>
     </div>
